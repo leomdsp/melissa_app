@@ -1,0 +1,4 @@
+#Sat Oct 19 21:59:33 BRT 2019
+base.0=/home/victor/Documentos/Melissa/melissa_app/build/app/intermediates/transforms/dexMerger/debug/0
+path.0=classes.dex
+renamed.0=classes.dex
