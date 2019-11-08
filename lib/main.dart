@@ -3,6 +3,8 @@ import 'package:melissa_app/pages/login.dart';
 import 'package:melissa_app/pages/cadastrar.dart';
 import 'package:melissa_app/pages/home.dart';
 import 'package:melissa_app/pages/about.dart';
+import 'package:melissa_app/pages/individual.dart';
+import 'package:melissa_app/pages/statusBars.dart';
 
 void main() => runApp(MyApp());
 
@@ -11,7 +13,9 @@ class MyApp extends StatelessWidget {
     HomePage.tag: (context) => HomePage(),
     AboutPage.tag: (context) => AboutPage(),
     Cadastrar.tag: (context) => Cadastrar(),
-    LoginPage.tag: (context) => LoginPage()
+    LoginPage.tag: (context) => LoginPage(),
+    Individual.tag: (context) => Individual(),
+    StatusBars.tag: (context) => StatusBars()
   };
 
   @override
