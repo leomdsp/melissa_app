@@ -172,21 +172,10 @@ class HomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Map<DateTime, double> createLineAlmostSaveValues() {
-      Map<DateTime, double> data = {};
-      data[DateTime.now().subtract(Duration(minutes: 40))] = 25.0;
-      data[DateTime.now().subtract(Duration(minutes: 30))] = 25.0;
-      data[DateTime.now().subtract(Duration(minutes: 22))] = 25.0;
-      data[DateTime.now().subtract(Duration(minutes: 20))] = 24.9;
-      data[DateTime.now().subtract(Duration(minutes: 15))] = 25.0;
-      data[DateTime.now().subtract(Duration(minutes: 12))] = 25.0;
-      data[DateTime.now().subtract(Duration(minutes: 5))] = 25.0;
-
-      return data;
-    }
     
     return Layout.getContent(
       context,
+      
       Container(
           color:Color(0xffE5E5E5),
           child:StaggeredGridView.count(

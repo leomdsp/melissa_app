@@ -30,8 +30,7 @@ class Layout {
         ],
         onTap: (int i) {
           currItem = i;
-
-          Navigator.of(context).pushNamed(pages[i]);
+          Navigator.of(context).pushReplacementNamed(pages[i]);
         },
       ),
       body: content,

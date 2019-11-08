@@ -10,6 +10,8 @@ import 'package:melissa_app/pages/individual.dart';
 void main() => runApp(MyApp());
 
 class MyApp extends StatelessWidget {
+  final GlobalKey<NavigatorState> navigatorKey = new GlobalKey<NavigatorState>();
+  
   final routes = <String, WidgetBuilder>{
     HomePage.tag: (context) => HomePage(),
     AboutPage.tag: (context) => AboutPage(),
