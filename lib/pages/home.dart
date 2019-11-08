@@ -27,70 +27,71 @@ class HomePage extends StatelessWidget {
   ];
 
   Material myTextItems(String title, String subtitle){
+    var notificationTitle = [ 'Colmeia1', 'Colmeia2', 'Colmeia3'];
+    var notificationSubtitle = ['o mel da colmeia esta pronto para ser coletado', 'A temperatura da colmeia está muito elevada', 'a umidade da colmeia esta muito baixa'];
     return Material(
       color: Colors.white,
       elevation: 14.0,
       borderRadius: BorderRadius.circular(24.0),
       shadowColor: Color(0x802196F3),
-     // child: Center(
-        child:
-              Column(
-      children: <Widget>[
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: <Widget>[
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                Padding(
-                  padding:
-                      const EdgeInsets.fromLTRB(12.0, 12.0, 12.0, 6.0),
-                  child: Text(
-                    "Colmeia 2",
-                    style: TextStyle(
-                        fontSize: 22.0, fontWeight: FontWeight.bold),
-                  ),
-                ),
-                Padding(
-                  padding:
-                      const EdgeInsets.fromLTRB(12.0, 6.0, 12.0, 12.0),
-                  child: Text(
-                    "O mel da colmeia esta pronto para ser coletado.",
-                    style: TextStyle(fontSize: 11.0),
-                  ),
-                ),
-              ],
-            ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        child: ListView.builder(
+         itemBuilder: (context, position) {
+            return Column(
+            children: <Widget>[
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
-                  Text(
-                    "5m",
-                    style: TextStyle(color: Colors.grey),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      Padding(
+                        padding:
+                            const EdgeInsets.fromLTRB(12.0, 12.0, 12.0, 6.0),
+                        child: Text(
+                          notificationTitle[position],
+                          style: TextStyle(
+                              fontSize: 22.0, fontWeight: FontWeight.bold),
+                        ),
+                      ),
+                      Padding(
+                        padding:
+                            const EdgeInsets.fromLTRB(12.0, 6.0, 12.0, 12.0),
+                        child: Text(
+                          notificationSubtitle[position],
+                          style: TextStyle(fontSize: 11.0),
+                        ),
+                      ),
+                    ],
                   ),
                   Padding(
-                    padding: const EdgeInsets.all(10.0),
-                    child: new IconButton(
-                      icon: new Icon(Icons.restore_from_trash),
-                      highlightColor: Colors.pink,
-                      onPressed: (){_onSearchButtonPressed();},
+                    padding: const EdgeInsets.all(8.0),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: <Widget>[
+                        // Text(
+                        //   "5m",
+                        //   style: TextStyle(color: Colors.grey),
+                        // ),
+                        Padding(
+                          padding: const EdgeInsets.all(10.0),
+                          child: new IconButton(
+                            icon: new Icon(Icons.restore_from_trash),
+                            highlightColor: Colors.pink,
+                            onPressed: (){_onSearchButtonPressed();},
+                          ),
+                        ),
+                      ],
                     ),
                   ),
                 ],
               ),
-           
-            ),
-      ],
-    ),
-                                  
             ],
-          ),
-        );
- 
+          );
+        },
+        itemCount: notificationTitle.length,
+      ),
+    );
   }
-
 
   Material myCircularItems(String title){
     return Material(
@@ -190,16 +191,12 @@ class HomePage extends StatelessWidget {
             padding: const EdgeInsets.all(6.0),
             child: myTextItems("Notificações","a1a1"),
           ),
-          // Padding(
-          //   padding: const EdgeInsets.all(8.0),
-          //   child:   PieChartSample2(),
-          // ),
           
         ],
         staggeredTiles: [
           StaggeredTile.extent(2, 200.0),
           StaggeredTile.extent(2, 200.0),
-          StaggeredTile.extent(4, 120.0),
+          StaggeredTile.extent(4, 200.0),
           //StaggeredTile.extent(2, 250.0),
         ],
       ),
