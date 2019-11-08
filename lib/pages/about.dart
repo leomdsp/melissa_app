@@ -6,6 +6,7 @@ class AboutPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Layout.getContent(context, Center(child: Text('Teste')));
+    return Layout.getContent(
+        context, Center(child: Text('Sobre o aplicativo')));
   }
 }

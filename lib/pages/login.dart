@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:melissa_app/pages/cadastrar.dart';
 import 'package:melissa_app/pages/home.dart';
 import 'package:melissa_app/pages/individual.dart';
+import 'package:melissa_app/pages/register.dart';
 
 class LoginPage extends StatelessWidget {
   static String tag = 'login-page';
@@ -205,7 +205,7 @@ class LoginPage extends StatelessWidget {
                             textAlign: TextAlign.center,
                           ),
                           onPressed: () {
-                            Navigator.of(context).pushNamed(Cadastrar.tag);
+                            Navigator.of(context).pushNamed(RegisterPage.tag);
                           },
                         ),
                       ),
