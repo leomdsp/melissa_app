@@ -2,36 +2,51 @@ import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:flutter_circular_chart/flutter_circular_chart.dart';
 import 'package:melissa_app/layout.dart';
-import 'package:melissa_app/widgets/HomeList.dart';
+import 'package:flutter_rounded_progress_bar/flutter_icon_rounded_progress_bar.dart';
+import 'package:flutter_rounded_progress_bar/rounded_progress_bar_style.dart';
 
 class HomePage extends StatelessWidget {
   static String tag = 'home-page';
 
-   var data = [0.0, 1.0, 1.5, 2.0, 0.0, 0.0, -0.5, -1.0, -0.5, 0.0, 0.0];
-  var data1 = [0.0,-2.0,3.5,-2.0,0.5,0.7,0.8,1.0,2.0,3.0,3.2];
-
-  void _onSearchButtonPressed() {
-    print("search button clicked");
+  void _onSearchButtonPressed(String aux) {
+    print(aux + " button clicked");
   }
 
-  List<CircularStackEntry> circularData = <CircularStackEntry>[
-    new CircularStackEntry(
-      <CircularSegmentEntry>[
-        new CircularSegmentEntry(700.0, Color(0xff4285F4), rankKey: 'Q1'),
-        new CircularSegmentEntry(1000.0, Color(0xfff3af00), rankKey: 'Q2'),
-        new CircularSegmentEntry(1800.0, Color(0xffec3337), rankKey: 'Q3'),
-        new CircularSegmentEntry(1000.0, Color(0xff40b24b), rankKey: 'Q4'),
-      ],
-      rankKey: 'Quarterly Profits',
-    ),
-  ];
+  Material weightBar(){
+    return Material(
+      color: Colors.white,
+      elevation: 10.0,
+      borderRadius: BorderRadius.circular(24.0),
+      shadowColor: Color(0x802196F3),
+      child:  Padding(
+        padding: const EdgeInsets.all(6.0),
+        child: IconRoundedProgressBar(
+          icon: Padding(
+          padding: EdgeInsets.all(8), 
+          child: Icon(Icons.view_stream)),
+         // theme: RoundedProgressBarTheme.yellow,
+          margin: EdgeInsets.symmetric(vertical: 16),
+          borderRadius: BorderRadius.circular(24),
+          percent: 15,
+          style: RoundedProgressBarStyle(
+          colorBackgroundIcon: Colors.white,
+          colorProgress: Colors.yellow[200],
+          colorProgressDark: Color(0xffc0392b),
+          colorBorder: Colors.white24,
+          backgroundProgress: Colors.orange[200],
+          borderWidth: 4,
+          widthShadow: 6),
+          ),
+      ),
+    );
+  }
 
-  Material myTextItems(String title, String subtitle){
+  Material notificationItems(){
     var notificationTitle = [ 'Colmeia1', 'Colmeia2', 'Colmeia3'];
     var notificationSubtitle = ['o mel da colmeia esta pronto para ser coletado', 'A temperatura da colmeia está muito elevada', 'a umidade da colmeia esta muito baixa'];
     return Material(
       color: Colors.white,
-      elevation: 14.0,
+      elevation: 10.0,
       borderRadius: BorderRadius.circular(24.0),
       shadowColor: Color(0x802196F3),
         child: ListView.builder(
@@ -77,7 +92,7 @@ class HomePage extends StatelessWidget {
                           child: new IconButton(
                             icon: new Icon(Icons.restore_from_trash),
                             highlightColor: Colors.pink,
-                            onPressed: (){_onSearchButtonPressed();},
+                            onPressed: (){_onSearchButtonPressed(notificationTitle[position]);},
                           ),
                         ),
                       ],
@@ -96,7 +111,7 @@ class HomePage extends StatelessWidget {
   Material myCircularItems(String title){
     return Material(
       color: Colors.white,
-      elevation: 14.0,
+      elevation: 10.0,
       borderRadius: BorderRadius.circular(24.0),
       shadowColor: Color(0x802196F3),
       child: Center(
@@ -187,17 +202,20 @@ class HomePage extends StatelessWidget {
             padding: const EdgeInsets.all(8.0),
             child: myCircularItems("Umidade"),
           ),
+          Padding(
+            padding: const EdgeInsets.all(6.0),
+            child: weightBar(),
+          ),
            Padding(
             padding: const EdgeInsets.all(6.0),
-            child: myTextItems("Notificações","a1a1"),
+            child: notificationItems(),
           ),
-          
         ],
         staggeredTiles: [
-          StaggeredTile.extent(2, 200.0),
-          StaggeredTile.extent(2, 200.0),
+          StaggeredTile.extent(2, 180.0),
+          StaggeredTile.extent(2, 180.0),
+          StaggeredTile.extent(4, 118.0),
           StaggeredTile.extent(4, 200.0),
-          //StaggeredTile.extent(2, 250.0),
         ],
       ),
       ),
