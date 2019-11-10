@@ -1,33 +1,28 @@
 import 'package:flutter/material.dart';
 import 'package:fl_animated_linechart/fl_animated_linechart.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
-import 'package:flutter_circular_chart/flutter_circular_chart.dart';
-
-
-/// Sample linear data type.
-class LinearSales {
-  final int year;
-  final int sales;
-
-  LinearSales(this.year, this.sales);
-}
+import 'dart:math';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 
 class Individual extends StatelessWidget {
   static String tag = 'individual';
-  var data = [0.0, 1.0, 1.5, 2.0, 0.0, 0.0, -0.5, -1.0, -0.5, 0.0, 0.0];
-  var data1 = [0.0,-2.0,3.5,-2.0,0.5,0.7,0.8,1.0,2.0,3.0,3.2];
+  var data;
 
-  List<CircularStackEntry> circularData = <CircularStackEntry>[
-    new CircularStackEntry(
-      <CircularSegmentEntry>[
-        new CircularSegmentEntry(700.0, Color(0xff4285F4), rankKey: 'Q1'),
-        new CircularSegmentEntry(1000.0, Color(0xfff3af00), rankKey: 'Q2'),
-        new CircularSegmentEntry(1800.0, Color(0xffec3337), rankKey: 'Q3'),
-        new CircularSegmentEntry(1000.0, Color(0xff40b24b), rankKey: 'Q4'),
-      ],
-      rankKey: 'Quarterly Profits',
-    ),
-  ];
+  Future<bool> getData() async{
+    var url = 'http://192.168.11.7/Esp8266/getdatos.php';
+    http.Response response = await http.get(url);
+    var body = response.body;
+    data = jsonDecode(body);
+    print(data[2]['temperatura']);
+    if(data!= null)
+      return true;
+    return false;
+  }
+
+  // Individual(){
+  //   getData();
+  // }
 
   Material myTextItems(String title, String subtitle){
     return Material(
@@ -59,7 +54,6 @@ class Individual extends StatelessWidget {
                       fontSize: 30.0,
                     ),),
                   ),
-
                ],
               ),
             ],
@@ -69,106 +63,28 @@ class Individual extends StatelessWidget {
     );
   }
 
+  AnimatedLineChart getChart(String field) {
+     //getData();
+    Map<DateTime, double> createLineAlmostSaveValues(){
+    Map<DateTime, double> dataChart = {};
 
-  Material myCircularItems(String title, String subtitle){
-    return Material(
-      color: Colors.white,
-      elevation: 14.0,
-      borderRadius: BorderRadius.circular(24.0),
-      shadowColor: Color(0x802196F3),
-      child: Center(
-        child:Padding(
-          padding: EdgeInsets.all(8.0),
-          child: Row(
-            mainAxisAlignment:MainAxisAlignment.center,
-            children: <Widget>[
-              Column(
-                mainAxisAlignment:MainAxisAlignment.center,
-                children: <Widget>[
+    for (var i = 0; i < data.length; i++) {
+      dataChart[DateTime.now().subtract(Duration(minutes: i*-10))] = double.parse(data[i][field]);
+    }
 
-                  Padding(
-                    padding: EdgeInsets.all(8.0),
-                    child:Text(title,style:TextStyle(
-                      fontSize: 20.0,
-                      color: Colors.blueAccent,
-                    ),),
-                  ),
-
-                  Padding(
-                    padding: EdgeInsets.all(8.0),
-                    child:Text(subtitle,style:TextStyle(
-                      fontSize: 30.0,
-                    ),),
-                  ),
-
-                  Padding(
-                    padding:EdgeInsets.all(8.0),
-                    child:AnimatedCircularChart(
-                      size: const Size(100.0, 100.0),
-                      initialChartData: circularData,
-                      chartType: CircularChartType.Pie,
-                    ),
-                  ),
-
-                ],
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-
-
-  Material temperatureChart(String title) {
-    return Material(
-      color: Colors.white,
-      elevation: 14.0,
-      borderRadius: BorderRadius.circular(24.0),
-      shadowColor: Color(0x802196F3),
-      child: Center(
-        child: Padding(
-          padding: EdgeInsets.all(8.0),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-
-                  Padding(
-                    padding: EdgeInsets.all(8.0),
-                    child: Text(title, style: TextStyle(
-                      fontSize: 20.0,
-                      color: Colors.blueAccent,
-                    ),),
-                  ),
-                ],
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
+      return dataChart;
+    }
+    LineChart chart;
+    chart = LineChart.fromDateTimeMaps([createLineAlmostSaveValues()], [Colors.orangeAccent], ['']);
+    return AnimatedLineChart(chart);
   }
 
   @override
   Widget build(BuildContext context) {
-    Map<DateTime, double> createLineAlmostSaveValues() {
-      Map<DateTime, double> data = {};
-      data[DateTime.now().subtract(Duration(minutes: 40))] = 25.0;
-      data[DateTime.now().subtract(Duration(minutes: 30))] = 25.0;
-      data[DateTime.now().subtract(Duration(minutes: 22))] = 25.0;
-      data[DateTime.now().subtract(Duration(minutes: 20))] = 24.9;
-      data[DateTime.now().subtract(Duration(minutes: 15))] = 25.0;
-      data[DateTime.now().subtract(Duration(minutes: 12))] = 25.0;
-      data[DateTime.now().subtract(Duration(minutes: 5))] = 25.0;
 
-      return data;
-    }
-    LineChart chart;
-    chart = LineChart.fromDateTimeMaps([createLineAlmostSaveValues()], [Colors.orangeAccent], ['C']);
-    
+    //getData();
+
+   
     return Scaffold(
       appBar: AppBar(title: Text('Colmeia'), backgroundColor: Color(0xFFF58524)),
       body:Container(
@@ -215,8 +131,22 @@ class Individual extends StatelessWidget {
                   fit: FlexFit.tight, 
                   child: Container( 
                     padding: EdgeInsets.all(8.0), 
-                    child:AnimatedLineChart(chart)
+                    child:  FutureBuilder(
+                      future: Future.wait([
+                        getData(),
+                      ]),
+                      builder: (
+                        context, 
+                          // List of booleans(results of all futures above)
+                          AsyncSnapshot<List<bool>> snapshot, 
+                      ){  
+                        if (data == null) { 
+                           return CircularProgressIndicator();
+                        }
+                        return getChart('temperatura');
+                      }
                   )
+                ),
                 ),
               ])
             ),
@@ -244,15 +174,36 @@ class Individual extends StatelessWidget {
                     ),),),
                   ),
                 Padding(padding: EdgeInsets.all(10.0)),
-
-                Flexible( 
+                 Flexible( 
                   flex: 3, 
                   fit: FlexFit.tight, 
                   child: Container( 
                     padding: EdgeInsets.all(8.0), 
-                    child:AnimatedLineChart(chart)
+                    child:  FutureBuilder(
+                      future: Future.wait([
+                        getData(),
+                      ]),
+                      builder: (
+                        context, 
+                          // List of booleans(results of all futures above)
+                          AsyncSnapshot<List<bool>> snapshot, 
+                      ){  
+                        if (data == null) { 
+                           return CircularProgressIndicator();
+                        }
+                        return getChart('umidade');
+                      }
                   )
                 ),
+                ),
+                // Flexible( 
+                //   flex: 3, 
+                //   fit: FlexFit.tight, 
+                //   child: Container( 
+                //     padding: EdgeInsets.all(8.0), 
+                //     child: getChart(),
+                //   )
+                // ),
               ])
             ),
           ),
