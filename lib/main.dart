@@ -41,7 +41,7 @@ class MyApp extends StatelessWidget {
           body1: TextStyle(fontSize: 14),
         ),
       ),
-      home: Individual(),
+      home: HomePage(),
       routes: routes,
     );
   }

@@ -64,7 +64,6 @@ class Individual extends StatelessWidget {
   }
 
   AnimatedLineChart getChart(String field) {
-     //getData();
     Map<DateTime, double> createLineAlmostSaveValues(){
     Map<DateTime, double> dataChart = {};
 
@@ -81,10 +80,6 @@ class Individual extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
-    //getData();
-
-   
     return Scaffold(
       appBar: AppBar(title: Text('Colmeia'), backgroundColor: Color(0xFFF58524)),
       body:Container(
@@ -139,14 +134,15 @@ class Individual extends StatelessWidget {
                         context, 
                           // List of booleans(results of all futures above)
                           AsyncSnapshot<List<bool>> snapshot, 
-                      ){  
+                      ){
+                        print(snapshot.data);  
                         if (data == null) { 
                            return CircularProgressIndicator();
                         }
                         return getChart('temperatura');
                       }
-                  )
-                ),
+                    )
+                  ),
                 ),
               ])
             ),
@@ -193,29 +189,12 @@ class Individual extends StatelessWidget {
                         }
                         return getChart('umidade');
                       }
-                  )
+                    )
+                  ),
                 ),
-                ),
-                // Flexible( 
-                //   flex: 3, 
-                //   fit: FlexFit.tight, 
-                //   child: Container( 
-                //     padding: EdgeInsets.all(8.0), 
-                //     child: getChart(),
-                //   )
-                // ),
               ])
             ),
           ),
-          // Padding(
-          //   padding: const EdgeInsets.all(8.0),
-          //   child: myCircularItems("Quarterly Profits","68.7M"),
-          // ),
-          // Padding(
-          //   padding: const EdgeInsets.all(8.0),
-          //   child: mychart2Items("Conversion","0.9M","+19% of target"),
-          // ),
-
         ],
         staggeredTiles: [
           StaggeredTile.extent(2, 120.0),

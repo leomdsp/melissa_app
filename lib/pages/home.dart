@@ -4,9 +4,26 @@ import 'package:flutter_circular_chart/flutter_circular_chart.dart';
 import 'package:melissa_app/layout.dart';
 import 'package:flutter_rounded_progress_bar/flutter_icon_rounded_progress_bar.dart';
 import 'package:flutter_rounded_progress_bar/rounded_progress_bar_style.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 
 class HomePage extends StatelessWidget {
   static String tag = 'home-page';
+  var data;
+
+  Future<bool> getData() async{
+    if(data != null)
+      return true;
+
+    var url = 'http://192.168.11.7/Esp8266/getdatos.php';
+    http.Response response = await http.get(url);
+    var body = response.body;
+    data = jsonDecode(body);
+    print(data[2]['temperatura']);
+    if(data!= null)
+      return true;
+    return false;
+  }
 
   void _onSearchButtonPressed(String aux) {
     print(aux + " button clicked");
@@ -108,7 +125,46 @@ class HomePage extends StatelessWidget {
     );
   }
 
-  Material myCircularItems(String title){
+  List<double> getPercentual(String field, List<double> thresholds){
+    var list = new List<double>();
+    list.add(0);
+    list.add(0);
+    list.add(0);
+    var aux;
+    for (var i = 0; i < data.length; i++) {
+      aux = double.parse(data[i][field]);
+      if(aux > thresholds[0]){
+        list[0]++;
+      } else{
+        if(aux > thresholds[1]){
+          list[1]++;
+        }else{
+          list[2]++;
+        }
+      }
+    }
+    return list;
+  }
+
+  Material myCircularItems(int aux, String field){
+     var title;
+     var datas;
+    if(aux ==  0){
+      List<double> thresholds = new List<double>();
+      thresholds.add(40);
+      thresholds.add(23);
+      datas = getPercentual(field,thresholds);
+      title = "Temperatura"; 
+    }
+    else{ 
+      if(aux == 1){
+        List<double> thresholds = new List<double>(); 
+        thresholds.add(20);
+        thresholds.add(10);
+        datas = getPercentual(field,thresholds);
+        title = "Umidade";
+      }
+    }
     return Material(
       color: Colors.white,
       elevation: 10.0,
@@ -138,17 +194,17 @@ class HomePage extends StatelessWidget {
                       new CircularStackEntry(
                         <CircularSegmentEntry>[
                           new CircularSegmentEntry(
-                            33.33,
+                            datas[0],
                             Colors.blue,
                             rankKey: 'completed',
                           ),
                           new CircularSegmentEntry(
-                            33.33,
+                            datas[1],
                             Colors.green,
                             rankKey: 'remaining',
                           ),
                            new CircularSegmentEntry(
-                            33.33,
+                            datas[2],
                             Colors.red,
                             rankKey: 'remaining',
                           ),
@@ -157,10 +213,9 @@ class HomePage extends StatelessWidget {
                       ),
                     ],
                     chartType: CircularChartType.Radial,
-                    percentageValues: true,
+                    percentageValues: false,
                   )
                   ),
-
                 ],
               ),
             ],
@@ -185,12 +240,46 @@ class HomePage extends StatelessWidget {
         children: <Widget>[
           Padding(
             padding: const EdgeInsets.all(8.0),
-            child: myCircularItems("Temperatura"),
+            child: FutureBuilder(
+                      future: Future.wait([
+                        getData(),
+                      ]),
+                      builder: (
+                        context, 
+                          // List of booleans(results of all futures above)
+                          AsyncSnapshot<List<bool>> snapshot, 
+                      ){
+                        print(snapshot.data);  
+                        if (data == null) { 
+                           return CircularProgressIndicator();
+                        }
+                        return  myCircularItems(0,'temperatura');
+                      }
+                    ),
           ),
-          Padding(
+            Padding(
             padding: const EdgeInsets.all(8.0),
-            child: myCircularItems("Umidade"),
+            child: FutureBuilder(
+                      future: Future.wait([
+                        getData(),
+                      ]),
+                      builder: (
+                        context, 
+                          // List of booleans(results of all futures above)
+                          AsyncSnapshot<List<bool>> snapshot, 
+                      ){
+                        print(snapshot.data);  
+                        if (data == null) { 
+                           return CircularProgressIndicator();
+                        }
+                        return  myCircularItems(1,'umidade');
+                      }
+                    ),
           ),
+          // Padding(
+          //   padding: const EdgeInsets.all(8.0),
+          //   child: myCircularItems(1,'umidade'),
+          // ),
           Padding(
             padding: const EdgeInsets.all(6.0),
             child: weightBar(),
