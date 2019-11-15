@@ -5,12 +5,18 @@ import 'package:melissa_app/pages/register.dart';
 import 'package:melissa_app/pages/home.dart';
 import 'package:melissa_app/pages/hives.dart';
 import 'package:melissa_app/pages/about.dart';
+import 'package:melissa_app/pages/individual.dart';
 
 void main() => runApp(MyApp());
 
 class MyApp extends StatelessWidget {
+  final GlobalKey<NavigatorState> navigatorKey = new GlobalKey<NavigatorState>();
+  
   final routes = <String, WidgetBuilder>{
     HomePage.tag: (context) => HomePage(),
+    AboutPage.tag: (context) => AboutPage(),
+    LoginPage.tag: (context) => LoginPage(),
+    Individual.tag: (context) => Individual(),
     HivesPage.tag: (context) => HivesPage(),
     RegisterPage.tag: (context) => RegisterPage(),
     LoginPage.tag: (context) => LoginPage(),

@@ -1,10 +1,10 @@
 {
     "logs": [
         {
-            "outputFile": "/home/victor/Documentos/Melissa/melissa_app/build/app/intermediates/incremental/mergeDebugResources/merged.dir/values/values.xml",
+            "outputFile": "/home/victor/Documentos/melissa/melissa_app/build/app/intermediates/incremental/mergeDebugResources/merged.dir/values/values.xml",
             "map": [
                 {
-                    "source": "/home/victor/Documentos/Melissa/melissa_app/android/app/src/main/res/values/styles.xml",
+                    "source": "/home/victor/Documentos/melissa/melissa_app/android/app/src/main/res/values/styles.xml",
                     "from": {
                         "startLines": "2",
                         "startColumns": "4",

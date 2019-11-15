@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/material.dart' as prefix0;
 import 'package:melissa_app/pages/about.dart';
 import 'pages/home.dart';
 import 'pages/hives.dart';
@@ -11,7 +12,7 @@ class Layout {
   static Scaffold getContent(BuildContext context, content) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Color.fromRGBO(150, 150, 150, 1),
+        backgroundColor: Colors.orange,
         title: Center(
           child: Text('Melissa'),
         ),
@@ -30,7 +31,7 @@ class Layout {
         ],
         onTap: (int i) {
           currItem = i;
-          Navigator.of(context).pushNamed(pages[i]);
+          Navigator.of(context).pushReplacementNamed(pages[i]);
         },
       ),
       body: content,
