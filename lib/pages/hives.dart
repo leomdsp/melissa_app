@@ -7,16 +7,7 @@ class HivesPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final content = ListView(
-      shrinkWrap: true,
-      children: <Widget>[
-        ListTile(
-            leading: Icon(Icons.pages),
-            title: Text('First'),
-            subtitle: Text('Subtitle'),
-            trailing: Icon(Icons.settings_applications))
-      ],
-    );
+    final content = HomeList();
 
     return Layout.getContent(context, content);
   }

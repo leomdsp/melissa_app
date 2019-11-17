@@ -10,13 +10,14 @@ import 'package:melissa_app/pages/individual.dart';
 void main() => runApp(MyApp());
 
 class MyApp extends StatelessWidget {
-  final GlobalKey<NavigatorState> navigatorKey = new GlobalKey<NavigatorState>();
-  
+  final GlobalKey<NavigatorState> navigatorKey =
+      new GlobalKey<NavigatorState>();
+
   final routes = <String, WidgetBuilder>{
     HomePage.tag: (context) => HomePage(),
     AboutPage.tag: (context) => AboutPage(),
     LoginPage.tag: (context) => LoginPage(),
-    Individual.tag: (context) => Individual(),
+    IndividualPage.tag: (context) => IndividualPage(),
     HivesPage.tag: (context) => HivesPage(),
     RegisterPage.tag: (context) => RegisterPage(),
     LoginPage.tag: (context) => LoginPage(),
@@ -33,15 +34,12 @@ class MyApp extends StatelessWidget {
         accentColor: Layout.secondary(),
         brightness: Brightness.light,
         textTheme: TextTheme(
-          headline: TextStyle(fontSize: 72, fontWeight: FontWeight.bold),
-          title: TextStyle(
-              fontSize: 36,
-              fontStyle: FontStyle.italic,
-              color: Colors.deepOrange),
+          headline: TextStyle(fontSize: 48, fontWeight: FontWeight.bold),
+          title: TextStyle(fontSize: 24, color: Layout.primary()),
           body1: TextStyle(fontSize: 14),
         ),
       ),
-      home: HomePage(),
+      home: IndividualPage(),
       routes: routes,
     );
   }

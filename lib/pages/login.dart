@@ -148,7 +148,7 @@ class LoginPage extends StatelessWidget {
                             ),
                             onPressed: () {
                               if (formState.currentState.validate()) {
-                                Navigator.of(context).pushNamed(Individual.tag);
+                                Navigator.of(context).pushNamed(HomePage.tag);
                                 print('Funfou');
                               }
                             },

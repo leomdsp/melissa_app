@@ -5,8 +5,8 @@ import 'dart:math';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
-class Individual extends StatelessWidget {
-  static String tag = 'individual';
+class IndividualPage extends StatelessWidget {
+  static String tag = 'individual-page';
   var data;
 
   Future<bool> getData(String chipid) async{
@@ -26,28 +26,32 @@ class Individual extends StatelessWidget {
       borderRadius: BorderRadius.circular(24.0),
       shadowColor: Color(0x802196F3),
       child: Center(
-        child:Padding(
+        child: Padding(
           padding: EdgeInsets.all(8.0),
           child: Row(
-            mainAxisAlignment:MainAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
               Column(
-                mainAxisAlignment:MainAxisAlignment.center,
-               children: <Widget>[
-
-                  Padding(
-                   padding: EdgeInsets.all(8.0),
-                      child:Text(title,style:TextStyle(
-                        fontSize: 20.0,
-                        color: Colors.blueAccent,
-                      ),),
-                    ),
-
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
                   Padding(
                     padding: EdgeInsets.all(8.0),
-                    child:Text(subtitle,style:TextStyle(
-                      fontSize: 30.0,
-                    ),),
+                    child: Text(
+                      title,
+                      style: TextStyle(
+                        fontSize: 20.0,
+                        color: Colors.blueAccent,
+                      ),
+                    ),
+                  ),
+                  Padding(
+                    padding: EdgeInsets.all(8.0),
+                    child: Text(
+                      subtitle,
+                      style: TextStyle(
+                        fontSize: 30.0,
+                      ),
+                    ),
                   ),
                 ],
               ),
@@ -61,15 +65,16 @@ class Individual extends StatelessWidget {
   AnimatedLineChart getChart(String field) {
     Map<DateTime, double> createLineAlmostSaveValues(){
     Map<DateTime, double> dataChart = {};
-  
+    print(data);
     for (var i = 0; i < data.length; i++) {
-        dataChart[DateTime.now().subtract(Duration(minutes: i*-10))] = double.parse(data[i][field]);
+        dataChart[DateTime.parse(data[i]['data'])] = double.parse(data[i][field]);
     }
       return dataChart;
     }
     
     LineChart chart;
-    chart = LineChart.fromDateTimeMaps([createLineAlmostSaveValues()], [Colors.orangeAccent], ['']);
+    chart = LineChart.fromDateTimeMaps(
+        [createLineAlmostSaveValues()], [Colors.orangeAccent], ['']);
     return AnimatedLineChart(chart);
   }
 
@@ -81,7 +86,7 @@ class Individual extends StatelessWidget {
           color:Color(0xffE5E5E5),
           child: FutureBuilder(
             future: Future.wait([
-              getData("a2a2"),
+              getData("a2a2"), //Manda o id que tu quer pegar aq
             ]),
             builder: (
               context, 
