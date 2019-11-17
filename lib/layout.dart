@@ -4,6 +4,7 @@ import 'package:melissa_app/pages/about.dart';
 import 'pages/home.dart';
 import 'pages/hives.dart';
 import 'package:melissa_app/widgets/HomeList.dart';
+import 'package:melissa_app/pages/individual.dart';
 
 class Layout {
   static final pages = [HomePage.tag, HivesPage.tag, AboutPage.tag];
@@ -62,10 +63,10 @@ class Layout {
               );
 
               return AlertDialog(
-                title: Text('Colméias'),
+                title: Text('Identificador da coméia'),
                 content: SingleChildScrollView(
                   child: ListBody(
-                    children: <Widget>[Text('Identificador da colméia'), input],
+                    children: <Widget>[input],
                   ),
                 ),
                 actions: <Widget>[
@@ -82,11 +83,37 @@ class Layout {
                     child: Text('Adcionar Colméia',
                         style: TextStyle(color: Layout.light())),
                     onPressed: () {
-                      HomeList.items.add(ListTile(
-                        leading: Icon(Icons.pages),
-                        title: Text(_c.text),
-                        trailing: Icon(Icons.more_vert),
-                      ));
+                      HomeList.items.add(
+                        Card(
+                            child: Column(
+                                mainAxisSize: MainAxisSize.min,
+                                children: <Widget>[
+                              ListTile(
+                                onTap: () {
+                                  Navigator.of(context)
+                                      .pushNamed(IndividualPage.tag);
+                                },
+                                leading: Icon(Icons.pages),
+                                trailing: Icon(Icons.more_vert),
+                                title: Text("Colméia: " + _c.text),
+                              ),
+                              const ListTile(
+                                leading: Icon(Icons.whatshot),
+                                title: Text("Temperatura: "),
+                                dense: true,
+                              ),
+                              const ListTile(
+                                leading: Icon(Icons.cloud),
+                                title: Text("Humidade: "),
+                                dense: true,
+                              ),
+                              const ListTile(
+                                leading: Icon(Icons.line_weight),
+                                title: Text("Peso: "),
+                                dense: true,
+                              ),
+                            ])),
+                      );
                       Navigator.of(ctx).popAndPushNamed(HivesPage.tag);
                     },
                   )
