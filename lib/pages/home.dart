@@ -10,16 +10,17 @@ import 'dart:convert';
 class HomePage extends StatelessWidget {
   static String tag = 'home-page';
   var data;
+  var notificationType = new List<int>();
+  var notificationIds = new List<String>();
 
   Future<bool> getData() async{
     if(data != null)
       return true;
 
-    var url = 'http://192.168.11.7/Esp8266/getdatos.php';
+    var url = 'http://192.168.11.7/Esp8266/gethome.php';
     http.Response response = await http.get(url);
     var body = response.body;
     data = jsonDecode(body);
-    print(data[2]['temperatura']);
     if(data!= null)
       return true;
     return false;
@@ -30,6 +31,18 @@ class HomePage extends StatelessWidget {
   }
 
   Material weightBar(){
+    var count = 0;
+    for(var i = 0; i < data.length; i++){
+      if(double.parse(data[i]['peso']) > 5){
+        count++;
+        notificationType.add(0);
+        notificationIds.add(data[i]['chipid']);
+        print("shd");
+      }
+    }
+
+    var per = (count/data.length) * 100;
+
     return Material(
       color: Colors.white,
       elevation: 10.0,
@@ -41,10 +54,9 @@ class HomePage extends StatelessWidget {
           icon: Padding(
           padding: EdgeInsets.all(8), 
           child: Icon(Icons.view_stream)),
-         // theme: RoundedProgressBarTheme.yellow,
           margin: EdgeInsets.symmetric(vertical: 16),
           borderRadius: BorderRadius.circular(24),
-          percent: 15,
+          percent: per,
           style: RoundedProgressBarStyle(
           colorBackgroundIcon: Colors.white,
           colorProgress: Colors.yellow[200],
@@ -59,8 +71,17 @@ class HomePage extends StatelessWidget {
   }
 
   Material notificationItems(){
-    var notificationTitle = [ 'Colmeia1', 'Colmeia2', 'Colmeia3'];
-    var notificationSubtitle = ['o mel da colmeia esta pronto para ser coletado', 'A temperatura da colmeia está muito elevada', 'a umidade da colmeia esta muito baixa'];
+    var notificationTitle = [];
+    var notificationLabels = ['o mel da colmeia esta pronto para ser coletado', 'A temperatura da colmeia está muito elevada', 'a umidade da colmeia esta muito baixa'];
+    var notificationSubtitle = [];
+
+    for (var i = 0; i < notificationType.length; i++) {
+      notificationTitle.add("Colmeia " + notificationIds[i]);
+      notificationSubtitle.add(notificationLabels[notificationType[i]]);
+    }
+
+    print(notificationSubtitle);
+    
     return Material(
       color: Colors.white,
       elevation: 10.0,
@@ -95,26 +116,22 @@ class HomePage extends StatelessWidget {
                       ),
                     ],
                   ),
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: <Widget>[
-                        // Text(
-                        //   "5m",
-                        //   style: TextStyle(color: Colors.grey),
-                        // ),
-                        Padding(
-                          padding: const EdgeInsets.all(10.0),
-                          child: new IconButton(
-                            icon: new Icon(Icons.restore_from_trash),
-                            highlightColor: Colors.pink,
-                            onPressed: (){_onSearchButtonPressed(notificationTitle[position]);},
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
+                  // Padding(
+                  //   padding: const EdgeInsets.all(8.0),
+                  //   child: Column(
+                  //     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  //     children: <Widget>[
+                  //       Padding(
+                  //         padding: const EdgeInsets.all(10.0),
+                  //         child: new IconButton(
+                  //           icon: new Icon(Icons.restore_from_trash),
+                  //           highlightColor: Colors.pink,
+                  //           onPressed: (){_onSearchButtonPressed(notificationTitle[position]);},
+                  //         ),
+                  //       ),
+                  //     ],
+                  //   ),
+                  // ),
                 ],
               ),
             ],
@@ -135,6 +152,7 @@ class HomePage extends StatelessWidget {
       aux = double.parse(data[i][field]);
       if(aux > thresholds[0]){
         list[0]++;
+        
       } else{
         if(aux > thresholds[1]){
           list[1]++;
@@ -152,15 +170,15 @@ class HomePage extends StatelessWidget {
     if(aux ==  0){
       List<double> thresholds = new List<double>();
       thresholds.add(40);
-      thresholds.add(23);
+      thresholds.add(30);
       datas = getPercentual(field,thresholds);
       title = "Temperatura"; 
     }
     else{ 
       if(aux == 1){
         List<double> thresholds = new List<double>(); 
+        thresholds.add(30);
         thresholds.add(20);
-        thresholds.add(10);
         datas = getPercentual(field,thresholds);
         title = "Umidade";
       }
@@ -194,7 +212,7 @@ class HomePage extends StatelessWidget {
                       new CircularStackEntry(
                         <CircularSegmentEntry>[
                           new CircularSegmentEntry(
-                            datas[0],
+                            datas[2],
                             Colors.blue,
                             rankKey: 'completed',
                           ),
@@ -204,7 +222,7 @@ class HomePage extends StatelessWidget {
                             rankKey: 'remaining',
                           ),
                            new CircularSegmentEntry(
-                            datas[2],
+                            datas[0],
                             Colors.red,
                             rankKey: 'remaining',
                           ),
@@ -233,69 +251,49 @@ class HomePage extends StatelessWidget {
       
       Container(
           color:Color(0xffE5E5E5),
-          child:StaggeredGridView.count(
-            crossAxisCount: 4,
-           crossAxisSpacing: 12.0,
-          mainAxisSpacing: 12.0,
-        children: <Widget>[
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: FutureBuilder(
-                      future: Future.wait([
-                        getData(),
-                      ]),
-                      builder: (
-                        context, 
-                          // List of booleans(results of all futures above)
-                          AsyncSnapshot<List<bool>> snapshot, 
-                      ){
-                        print(snapshot.data);  
-                        if (data == null) { 
-                           return CircularProgressIndicator();
-                        }
-                        return  myCircularItems(0,'temperatura');
-                      }
-                    ),
-          ),
-            Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: FutureBuilder(
-                      future: Future.wait([
-                        getData(),
-                      ]),
-                      builder: (
-                        context, 
-                          // List of booleans(results of all futures above)
-                          AsyncSnapshot<List<bool>> snapshot, 
-                      ){
-                        print(snapshot.data);  
-                        if (data == null) { 
-                           return CircularProgressIndicator();
-                        }
-                        return  myCircularItems(1,'umidade');
-                      }
-                    ),
-          ),
-          // Padding(
-          //   padding: const EdgeInsets.all(8.0),
-          //   child: myCircularItems(1,'umidade'),
-          // ),
-          Padding(
-            padding: const EdgeInsets.all(6.0),
-            child: weightBar(),
-          ),
-           Padding(
-            padding: const EdgeInsets.all(6.0),
-            child: notificationItems(),
-          ),
-        ],
+          child:FutureBuilder(
+          future: Future.wait([
+            getData(),
+          ]),
+          builder: (
+            context, 
+            AsyncSnapshot<List<bool>> snapshot, 
+          ){         
+            if (data == null) { 
+              return CircularProgressIndicator();
+            }
+            return StaggeredGridView.count(
+              crossAxisCount: 4,
+              crossAxisSpacing: 12.0,
+              mainAxisSpacing: 12.0,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child:  
+                    myCircularItems(0,'temperatura')
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child:   myCircularItems(1,'umidade')
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(6.0),
+                  child: weightBar()
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(6.0),
+                  child: notificationItems()
+                ),
+              ],
         staggeredTiles: [
           StaggeredTile.extent(2, 180.0),
           StaggeredTile.extent(2, 180.0),
           StaggeredTile.extent(4, 118.0),
           StaggeredTile.extent(4, 200.0),
         ],
-      ),
+      );
+                      }
+          )
       ),
     );
   }
