@@ -13,11 +13,11 @@ class HomePage extends StatelessWidget {
   var notificationType = new List<int>();
   var notificationIds = new List<String>();
 
-  Future<bool> getData() async{
+  Future<bool> getData(String user_id) async{
     if(data != null)
       return true;
 
-    var url = 'http://192.168.11.7/Esp8266/gethome.php';
+    var url = 'http://192.168.11.7/Esp8266/gethome.php?user_id=' + user_id;
     http.Response response = await http.get(url);
     var body = response.body;
     data = jsonDecode(body);
@@ -37,11 +37,11 @@ class HomePage extends StatelessWidget {
         count++;
         notificationType.add(0);
         notificationIds.add(data[i]['chipid']);
-        print("shd");
       }
     }
-
-    var per = (count/data.length) * 100;
+    print(data);
+    var per = 100 -((count/data.length) * 100);
+    print(per);
 
     return Material(
       color: Colors.white,
@@ -253,7 +253,7 @@ class HomePage extends StatelessWidget {
           color:Color(0xffE5E5E5),
           child:FutureBuilder(
           future: Future.wait([
-            getData(),
+            getData("0"), // colocar o id do cara aqui
           ]),
           builder: (
             context, 

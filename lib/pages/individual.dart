@@ -86,7 +86,7 @@ class IndividualPage extends StatelessWidget {
           color:Color(0xffE5E5E5),
           child: FutureBuilder(
             future: Future.wait([
-              getData("a2a2"), //Manda o id que tu quer pegar aq
+              getData("a2a2"), //Manda o id que tu quer pegar aqx 
             ]),
             builder: (
               context, 
