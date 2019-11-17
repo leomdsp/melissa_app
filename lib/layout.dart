@@ -38,7 +38,7 @@ class Layout {
     );
   }
 
-  static List<Widget> _getActions(context) {
+  static List<Widget> _getActions(BuildContext context) {
     List<Widget> items = List<Widget>();
 
     if (pages[currItem] != HivesPage.tag) {
@@ -82,9 +82,12 @@ class Layout {
                     child: Text('Adcionar Colméia',
                         style: TextStyle(color: Layout.light())),
                     onPressed: () {
-                      print(_c.text);
-
-                      Navigator.of(ctx).pop();
+                      HomeList.items.add(ListTile(
+                        leading: Icon(Icons.pages),
+                        title: Text(_c.text),
+                        trailing: Icon(Icons.more_vert),
+                      ));
+                      Navigator.of(ctx).popAndPushNamed(HivesPage.tag);
                     },
                   )
                 ],

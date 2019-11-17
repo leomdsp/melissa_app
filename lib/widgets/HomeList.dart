@@ -10,6 +10,18 @@ class HomeList extends StatefulWidget {
 class _HomeListState extends State<HomeList> {
   @override
   Widget build(BuildContext context) {
-    return ListView(shrinkWrap: true, children: HomeList.items);
+    List<Widget> values = List<Widget>();
+
+    if (HomeList.items.length == 0) {
+      values.add(ListTile(
+        leading: Icon(Icons.pages),
+        title: Text("Nenhuma comlméia ainda"),
+        trailing: Icon(Icons.more_vert),
+      ));
+    }
+
+    return ListView(
+        shrinkWrap: true,
+        children: HomeList.items.length == 0 ? values : HomeList.items);
   }
 }
