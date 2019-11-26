@@ -64,7 +64,7 @@ class Layout {
               );
 
               return AlertDialog(
-                title: Text('Identificador da coméia'),
+                title: Text('Identificador da colméia'),
                 content: SingleChildScrollView(
                   child: ListBody(
                     children: <Widget>[input],
