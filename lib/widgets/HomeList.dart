@@ -23,6 +23,11 @@ class _HomeListState extends State<HomeList> {
     var body = response.body;
     data = jsonDecode(body);
 
+    // for(int i = 0; i< HomeList.items.length; i++){
+    //   HomeList.items.removeLast();
+    // }
+    HomeList.items = [];
+
     for(var i = 0; i< data.length; i++){
       HomeList.items.add(
         Card(
@@ -74,20 +79,6 @@ class _HomeListState extends State<HomeList> {
 
   @override
   Widget build(BuildContext context) {
-    List<Widget> values = List<Widget>();
-
-    for(int i = 0; i< HomeList.items.length; i++){
-      HomeList.items.removeLast();
-    }
-
-    if (HomeList.items.length == 0) {
-      values.add(ListTile(
-        leading: Icon(Icons.pages),
-        title: Text("Nenhuma colméia ainda"),
-        trailing: Icon(Icons.more_vert),
-      ));
-    }
-
     return FutureBuilder(
       future: Future.wait([
         getData("0"), //Manda o id que tu quer pegar aq
@@ -98,6 +89,16 @@ class _HomeListState extends State<HomeList> {
       ){
         if (data == null) { 
           return CircularProgressIndicator();
+        }
+
+        List<Widget> values = List<Widget>();
+
+        if (HomeList.items.length == 0) {
+          values.add(ListTile(
+            leading: Icon(Icons.pages),
+            title: Text("Nenhuma colméia ainda"),
+            trailing: Icon(Icons.more_vert),
+          ));
         }
 
         return ListView(
