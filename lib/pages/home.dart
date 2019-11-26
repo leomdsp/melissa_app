@@ -17,7 +17,7 @@ class HomePage extends StatelessWidget {
     if(data != null)
       return true;
 
-    var url = 'http://192.168.11.7/Esp8266/gethome.php?user_id=' + user_id;
+    var url = 'https://melissabeehives.000webhostapp.com/Esp8266/gethome.php?user_id=' + user_id;
     http.Response response = await http.get(url);
     var body = response.body;
     data = jsonDecode(body);

@@ -4,13 +4,14 @@ import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'dart:math';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+import 'package:melissa_app/pages/args.dart';
 
 class IndividualPage extends StatelessWidget {
   static String tag = 'individual-page';
   var data;
 
   Future<bool> getData(String chipid) async{
-    var url = 'http://192.168.11.7/Esp8266/getdatos.php?chipid=' + chipid;
+    var url = 'https://melissabeehives.000webhostapp.com/Esp8266/getdatos.php?chipid=' + chipid;
     http.Response response = await http.get(url);
     var body = response.body;
     data = jsonDecode(body);
@@ -65,7 +66,6 @@ class IndividualPage extends StatelessWidget {
   AnimatedLineChart getChart(String field) {
     Map<DateTime, double> createLineAlmostSaveValues(){
     Map<DateTime, double> dataChart = {};
-    print(data);
     for (var i = 0; i < data.length; i++) {
         dataChart[DateTime.parse(data[i]['data'])] = double.parse(data[i][field]);
     }
@@ -80,13 +80,15 @@ class IndividualPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final ScreenArguments args = ModalRoute.of(context).settings.arguments;
+    print(args.id);
     return Scaffold(
       appBar: AppBar(title: Text('Colmeia'), backgroundColor: Color(0xFFF58524)),
       body:Container(
           color:Color(0xffE5E5E5),
           child: FutureBuilder(
             future: Future.wait([
-              getData("a2a2"), //Manda o id que tu quer pegar aqx 
+              getData(args.id), //Manda o id que tu quer pegar aqx 
             ]),
             builder: (
               context, 

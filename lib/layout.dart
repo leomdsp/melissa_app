@@ -5,6 +5,7 @@ import 'pages/home.dart';
 import 'pages/hives.dart';
 import 'package:melissa_app/widgets/HomeList.dart';
 import 'package:melissa_app/pages/individual.dart';
+import 'package:melissa_app/pages/args.dart';
 
 class Layout {
   static final pages = [HomePage.tag, HivesPage.tag, AboutPage.tag];
@@ -80,7 +81,7 @@ class Layout {
                   ),
                   RaisedButton(
                     color: primary(),
-                    child: Text('Adcionar Colméia',
+                    child: Text('Adicionar Colméia',
                         style: TextStyle(color: Layout.light())),
                     onPressed: () {
                       HomeList.items.add(
@@ -90,8 +91,17 @@ class Layout {
                                 children: <Widget>[
                               ListTile(
                                 onTap: () {
-                                  Navigator.of(context)
-                                      .pushNamed(IndividualPage.tag);
+                                   Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => IndividualPage(),
+                                      settings: RouteSettings(
+                                        arguments: ScreenArguments(
+                                          _c.text
+                                        ),
+                                      ),
+                                    ),
+                                  );
                                 },
                                 leading: Icon(Icons.pages),
                                 trailing: Icon(Icons.more_vert),
@@ -114,7 +124,7 @@ class Layout {
                               ),
                             ])),
                       );
-                      Navigator.of(ctx).popAndPushNamed(HivesPage.tag);
+                      Navigator.of(ctx).pop();
                     },
                   )
                 ],
