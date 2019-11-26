@@ -27,8 +27,12 @@ class _HomeListState extends State<HomeList> {
     //   HomeList.items.removeLast();
     // }
     HomeList.items = [];
-
+    String temperatura,peso,umidade;
     for(var i = 0; i< data.length; i++){
+      temperatura = "Temperatura: " + data[i]['temperatura'] + " ºC";
+      umidade = "Umidade: " + data[i]['umidade'] + " %";
+      peso = "Peso: " + data[i]['peso'] + " Kg";
+
       HomeList.items.add(
         Card(
           child: Column(
@@ -52,19 +56,19 @@ class _HomeListState extends State<HomeList> {
                     trailing: Icon(Icons.more_vert),
                     title: Text("Colméia: " + data[i]['chipid']),
                   ),
-                  const ListTile(
+                  ListTile(
                     leading: Icon(Icons.whatshot),
-                    title: Text("Temperatura: "),
+                    title: Text(temperatura),
                     dense: true,
                   ),
-                  const ListTile(
+                  ListTile(
                     leading: Icon(Icons.cloud),
-                    title: Text("Humidade: "),
+                    title: Text(umidade),
                     dense: true,
                   ),
-                  const ListTile(
+                  ListTile(
                     leading: Icon(Icons.line_weight),
-                    title: Text("Peso: "),
+                    title: Text(peso),
                     dense: true,
                   ),
                 ])),
