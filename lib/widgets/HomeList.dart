@@ -53,7 +53,6 @@ class _HomeListState extends State<HomeList> {
                       );
                     },
                     leading: Icon(Icons.pages),
-                    trailing: Icon(Icons.more_vert),
                     title: Text("Colméia: " + data[i]['chipid']),
                   ),
                   ListTile(
